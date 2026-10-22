@@ -13,16 +13,16 @@ h1:focus,h2:focus{outline:none}
 .masthead{display:flex;align-items:center;justify-content:space-between;min-height:76px;border-bottom:1px solid var(--line)}
 .brand{display:flex;gap:8px;align-items:center;text-decoration:none;font-size:18px;font-weight:750;letter-spacing:-.7px;min-height:44px}
 .brand-number{font-size:11px;font-weight:500;color:var(--muted)}
-.brand-mark{display:flex;gap:3px;align-items:end;width:18px;height:20px;margin-right:2px}
-.brand-mark i{display:block;width:4px;height:40%;background:var(--ink)}
-.brand-mark i:nth-child(2){height:70%}
-.brand-mark i:nth-child(3){height:100%;background:var(--accent)}
+
+
+
+
 .menu-button{min-height:44px;background:transparent;border:0;display:flex;gap:12px;align-items:center;color:var(--ink);font-size:13px}
 .menu-button span{font-size:18px}
 .slide{padding:29px 0 24px;min-height:calc(100svh - 212px);animation:enter .2s ease-out}
 .eyebrow,.small-label,.art-heading,.progress-info{font-size:10px;letter-spacing:1.25px;font-weight:650}
 .eyebrow{display:flex;gap:8px;align-items:center;font-size:9px}
-.eyebrow>span{width:6px;height:6px;flex-shrink:0;border-radius:50%;background:var(--accent)}
+
 h1,h2{font-family:var(--serif);font-weight:400;letter-spacing:-1.8px}
 h1{font-size:clamp(48px,13.3vw,76px);line-height:1.02;margin:24px 0 0;letter-spacing:-2.7px}
 h1 em,h2 em{color:var(--accent);font-weight:400}
@@ -45,7 +45,7 @@ h3{font-size:18px;line-height:1.4;margin:0 0 8px;font-weight:600}
 .bars i{height:var(--height);flex:1;background:#9cae92;border-radius:2px 2px 0 0}
 .sorted i{background:var(--ink)}
 .sorted i:last-child{background:var(--accent)}
-.art-arrow{color:#6b7a61;font-size:23px}
+
 .authors{margin-top:24px}
 .authors p{font-size:14px;line-height:1.8;margin:7px 0 0;font-weight:600}
 .professor{margin:13px 0 0;color:var(--muted);font-size:11px;line-height:1.7}
@@ -63,18 +63,18 @@ h3{font-size:18px;line-height:1.4;margin:0 0 8px;font-weight:600}
 .button{display:inline-flex;align-items:center;justify-content:center;gap:12px;min-height:46px;padding:10px 16px;background:transparent;color:var(--ink);border:1px solid #bdc8b6;border-radius:4px;font-size:14px;font-weight:600;text-decoration:none}
 .button.primary{background:var(--ink);border-color:var(--ink);color:var(--paper)}
 .button.wide{width:100%;margin-top:18px}
-.icon-button{min-width:46px;font-size:23px}
+
 .segmented{display:flex;gap:3px;padding:4px;background:#e5e9df;border-radius:6px;margin:16px 0 22px}
 .segmented button{flex:1;min-width:0;min-height:43px;padding:7px 4px;border:0;background:transparent;color:#52634f;border-radius:4px;font-size:13px;font-weight:600;line-height:1.3}
 .segmented button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
 .route-options{margin:28px 0}
 .route-option{display:flex;width:100%;align-items:center;gap:16px;padding:24px 0;min-height:100px;text-align:left;background:transparent;color:var(--ink);border:0;border-top:1px solid var(--line)}
 .route-option:last-child{border-bottom:1px solid var(--line)}
-.route-option>span:nth-child(2){flex:1}
+.route-option>span{flex:1}
 .route-option strong{display:block;font:27px var(--serif)}
 .route-option small{display:block;font-size:12px;color:var(--muted);margin-top:5px}
-.route-symbol{font-size:35px;color:var(--accent);width:37px}
-.pending .route-symbol{color:#7b8975}
+
+
 .roadmap{display:grid;grid-template-columns:repeat(4,1fr);margin:28px 0 10px;gap:5px}
 .roadmap>span{font:23px var(--serif);color:var(--accent);border-top:1px solid var(--line);padding-top:12px}
 .roadmap small{display:block;font:11px "Segoe UI",Arial,sans-serif;color:var(--muted);margin-top:5px}
@@ -241,3 +241,5 @@ pre{font-size:14px}
 a{color:black}
 .takeaways li>span{color:black}
 }
+
+.demo-controls .button{min-width:0;font-size:13px;padding:8px 10px}

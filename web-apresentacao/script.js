@@ -78,7 +78,7 @@ function drawTheory(scenario) {
     return bucket;
   }));
   $('theory-explanation').textContent = worst ? 'Todos os valores distintos chegam em ordem decrescente ao mesmo balde. O Insertion Sort precisa deslocar os anteriores a cada inserção.' : 'Um elemento em cada balde. Inicializar, distribuir e reunir os valores responde pelo custo total.';
-  $('theory-formula').textContent = worst ? '1 + 2 + … + (n − 1) = n(n − 1)/2 deslocamentos' : 'n elementos → trabalho proporcional a n';
+  $('theory-formula').textContent = worst ? '1 + 2 + … + (n − 1) = n(n − 1)/2 deslocamentos' : 'n elementos: trabalho proporcional a n';
 }
 document.querySelectorAll('[data-theory]').forEach(button => button.addEventListener('click', () => drawTheory(button.dataset.theory)));
 
@@ -116,7 +116,7 @@ function drawDemo() {
   }));
   const message = demoStep === 0 ? 'Toque abaixo para distribuir um número por vez.' : demoStep <= count ? `${chip(input[demoStep - 1]).textContent} foi para o balde ${Math.floor(input[demoStep - 1] * 5) + 1}. ${demoStep} de ${count} valores distribuídos.` : demoStep === count + 1 ? 'Cada balde foi ordenado com Insertion Sort. Agora podemos reunir os intervalos.' : 'Pronto: percorrer os baldes em ordem produz a saída crescente.';
   $('demo-message').textContent = message;
-  $('demo-step').textContent = demoStep < count ? 'Distribuir próximo' : demoStep === count ? 'Ordenar baldes' : demoStep === count + 1 ? 'Reunir resultado' : 'Concluído ✓';
+  $('demo-step').textContent = demoStep < count ? 'Distribuir próximo' : demoStep === count ? 'Ordenar baldes' : demoStep === count + 1 ? 'Reunir resultado' : 'Concluído';
   $('demo-step').disabled = demoStep >= count + 2;
   $('demo-output').hidden = demoStep < count + 2;
   $('demo-output-values').replaceChildren(...buckets.flat().map(value => chip(value)));
@@ -164,7 +164,7 @@ function drawChart(containerId, scenario, statistic, selectedN) {
   const grid = Array.from({length:5}, (_,i) => { const v=max*i/4,y=bottom-i/4*(bottom-top); return `<line class="grid" x1="${left}" x2="${right}" y1="${y}" y2="${y}"/><text x="${left-7}" y="${y+4}" text-anchor="end">${decimal(v,2)}</text>`; }).join('');
   const ticks = [...new Set([0,2,4,data.length-1])].map(i => `<text x="${point(values[i],i)[0]}" y="212" text-anchor="middle">${shortN(data[i].n)}</text>`).join('');
   const points = data.map((group,i) => { const [x,y]=point(values[i],i); return `<g role="button" tabindex="0" data-point="${group.n}" aria-label="${integer(group.n)} elementos: ${formattedTime(group[statistic])}" aria-pressed="${group.n===selectedN}"><circle class="point ${group.n===selectedN?'selected':''}" cx="${x}" cy="${y}" r="${group.n===selectedN?6:4}"/><circle class="hit" cx="${x}" cy="${y}" r="17"/></g>`; }).join('');
-  $(containerId).innerHTML = `<svg viewBox="0 0 375 245" role="group" aria-label="Tempo ${statistic==='mean'?'médio':'mediano'} por quantidade de elementos, em ${unit}"><text x="${left}" y="13">Tempo (${unit})</text>${grid}<polyline class="curve" points="${values.map((v,i)=>point(v,i).join(',')).join(' ')}"/>${ticks}${points}<text x="${(left+right)/2}" y="237" text-anchor="middle">Elementos · tamanhos testados</text></svg>`;
+  $(containerId).innerHTML = `<svg viewBox="0 0 375 245" role="group" aria-label="Tempo ${statistic==='mean'?'médio':'mediano'} por quantidade de elementos, em ${unit}"><text x="${left}" y="13">Tempo (${unit})</text>${grid}<polyline class="curve" points="${values.map((v,i)=>point(v,i).join(',')).join(' ')}"/>${ticks}${points}<text x="${(left+right)/2}" y="237" text-anchor="middle">Elementos - tamanhos testados</text></svg>`;
 }
 function drawResult(prefix, scenario) {
   const n = Number($(prefix === 'random' ? 'random-n' : 'cases-n').value);
@@ -172,7 +172,7 @@ function drawResult(prefix, scenario) {
   const group = groups[scenario].find(group => group.n === n);
   const t = time(group[statistic]);
   $(`${prefix}-value`).textContent = t.value; $(`${prefix}-unit`).textContent = t.unit;
-  $(`${prefix}-caption`).textContent = `${statistic === 'mean' ? 'Média' : 'Mediana'} de 3 execuções · ${integer(n)} elementos`;
+  $(`${prefix}-caption`).textContent = `${statistic === 'mean' ? 'Média' : 'Mediana'} de 3 execuções - ${integer(n)} elementos`;
   $(`${prefix}-repetitions`).replaceChildren(...group.rows.map(row => {
     const div = document.createElement('div'); div.className = 'repetition';
     const label = document.createElement('span'); label.textContent = `Repetição ${row.repetition}`;
@@ -184,7 +184,7 @@ function drawResult(prefix, scenario) {
     const best = groups.melhor.find(row => row.n === n)[statistic], worst = groups.pior.find(row => row.n === n)[statistic];
     $('compare-best').textContent = formattedTime(best); $('compare-worst').textContent = formattedTime(worst);
     const ratio = worst/best;
-    $('compare-ratio').textContent = ratio >= 1 ? `Nesta amostra, o pior caso levou ${decimal(ratio,1)}× o tempo do melhor caso.` : 'Nesta amostra pequena, o tempo do pior caso ficou abaixo do melhor. A variação da medição não altera a análise teórica.';
+    $('compare-ratio').textContent = ratio >= 1 ? `Nesta amostra, o pior caso levou ${decimal(ratio,1)} vezes o tempo do melhor caso.` : 'Nesta amostra pequena, o tempo do pior caso ficou abaixo do melhor. A variação da medição não altera a análise teórica.';
     $('cases-description').textContent = scenario === 'melhor' ? 'Um elemento por balde; a entrada foi embaralhada antes da ordenação.' : 'Valores distintos decrescentes, todos no primeiro balde. A faixa global permanece [0, 1).';
   }
 }

@@ -1,0 +1,33 @@
+﻿COMPUTADOR UTILIZADO NOS EXPERIMENTOS
+Counting Sort e Bucket Sort — Projeto e Análise de Algoritmos 1
+
+Data da coleta: 22/10/2026.
+
+Processador (CPU)
+- Modelo: Intel Core i5-13400F, 13ª geração.
+- Núcleos físicos: 10.
+- Processadores lógicos (threads): 16.
+- Frequência máxima informada pelo Windows (Win32_Processor): 2.500 MHz.
+  Esse valor é o informado pelo sistema e não representa o limite de turbo.
+
+Memória RAM
+- Capacidade instalada: 16 GiB (17.179.869.184 bytes).
+- Módulos detectados: 1, de 16 GiB.
+- Velocidade informada pelo Windows: 2.666 MHz.
+- Memória física disponibilizada ao sistema: aproximadamente 15,81 GiB.
+- Convenção utilizada: 1 GiB = 1.073.741.824 bytes.
+
+Computador
+- Fabricante informado pelo sistema: ASUS.
+- Modelo informado pelo sistema: System Product Name.
+- O firmware não informa um nome comercial específico para o computador.
+- Placa-mãe: ASUSTeK COMPUTER INC. PRIME H610M-E D4.
+
+Sistema operacional
+- Microsoft Windows 11 Pro, 64 bits.
+- Versão informada pelo sistema: 10.0.26100.
+
+Fonte dos dados
+Informações coletadas diretamente nesta máquina via PowerShell/CIM,
+utilizando Win32_ComputerSystem, Win32_Processor, Win32_PhysicalMemory,
+Win32_BaseBoard e Win32_OperatingSystem.

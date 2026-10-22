@@ -1,0 +1,18 @@
+﻿EXPERIMENTO BUCKET SORT
+Inicio: 2026-10-22T15:43:56-03:00
+Compilador: gcc.exe (Rev8, Built by MSYS2 project) 15.2.0
+Compilacao: gcc -std=c11 -O2 -Wall -Wextra -Wpedantic bucket_sort.c benchmark.c -lm
+Repeticoes por cenario/tamanho: 3
+Tipo: double; faixa global fixa [0, 1); k = n baldes; Insertion Sort interno.
+Relogio: QueryPerformanceCounter (Windows), tempo decorrido em segundos.
+Trecho medido: chamada completa bucket_sort, incluindo alocacao, distribuicao, ordenacao interna, copia de saida e liberacao.
+Fora do tempo: geracao, qsort de referencia, verificacao e gravacao dos resultados.
+Corretude: ordem crescente e igualdade exata da saida com qsort em cada medicao.
+Aquecimento: uma chamada com 1000 valores aleatorios, nao registrada no CSV.
+Aleatorio: SplitMix64 com 53 bits; semente registrada por repeticao.
+Melhor: um valor no centro de cada balde; entrada embaralhada.
+Pior: n valores distintos decrescentes no intervalo [0, 1/n), todos no primeiro balde.
+1.000.000 de elementos: executado somente no aleatorio; melhor/pior opcionais nao executados.
+Execucao sequencial das medicoes para evitar concorrencia entre benchmarks.
+Fim: 2026-10-22T15:46:31-03:00
+Status: concluido; todas as medicoes passaram na verificacao de corretude.

@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#f5f3eb">
+    <meta name="description" content="Apresentação do seminário de Projeto e Análise de Algoritmos 1: Counting Sort e Bucket Sort.">
+    <title>Counting Sort × Bucket Sort | Seminário</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="script.js" defer></script>
+  </head>
+  <body>
+    <div class="presentation">
+      <header class="masthead">
+        <a class="brand" href="#inicio" aria-label="Ir para o início"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span> PAA <span class="brand-number">01</span></a>
+        <span class="edition">SEMINÁRIO · N1</span>
+      </header>
+
+      <main id="slides">
+        <section class="slide cover" id="inicio" aria-labelledby="cover-title">
+          <div class="eyebrow"><span></span> PROJETO E ANÁLISE DE ALGORITMOS 1</div>
+          <h1 id="cover-title" tabindex="-1">Counting<br>Sort <span class="versus">×</span><br><em>Bucket Sort</em></h1>
+          <p class="intro">Dois caminhos para colocar<br>os dados em ordem.</p>
+
+          <div class="sorting-art" role="img" aria-label="Representação de valores desordenados sendo organizados em ordem crescente">
+            <div class="art-heading"><span>DA ENTRADA À ORDEM</span><span aria-hidden="true">↗</span></div>
+            <div class="bars-scene" aria-hidden="true">
+              <div class="bars unsorted"><i style="--height:46%"></i><i style="--height:90%"></i><i style="--height:28%"></i><i style="--height:66%"></i><i style="--height:40%"></i></div>
+              <span class="art-arrow">→</span>
+              <div class="bars sorted"><i style="--height:28%"></i><i style="--height:40%"></i><i style="--height:46%"></i><i style="--height:66%"></i><i style="--height:90%"></i></div>
+            </div>
+          </div>
+
+          <div class="authors"><span class="small-label">APRESENTADO POR</span><p>Ludmila Lima do Espirito Santo<br>Matheus Silva Pains</p></div>
+          <p class="professor">Prof. MSc. Anibal Santos Jukemura <span>· CMP 1065</span></p>
+        </section>
+
+        <section class="slide overview" id="objetivo" aria-labelledby="objective-title" hidden>
+          <div class="eyebrow"><span></span> O PONTO DE PARTIDA</div>
+          <h2 id="objective-title" tabindex="-1">Uma entrada.<br><em>Dois caminhos.</em></h2>
+          <p class="overview-intro">Comparar Counting Sort e Bucket Sort, relacionando a análise teórica aos resultados de uma implementação em C.</p>
+          <ol class="agenda">
+            <li><span class="agenda-number">01</span><div><h3>Entender</h3><p>Como cada algoritmo organiza os dados.</p></div></li>
+            <li><span class="agenda-number">02</span><div><h3>Experimentar</h3><p>Melhor caso, pior caso e entradas aleatórias.</p></div></li>
+            <li><span class="agenda-number">03</span><div><h3>Comparar</h3><p>Tempos de execução, gráficos e conclusões.</p></div></li>
+          </ol>
+          <div class="chapter-note"><span aria-hidden="true">↗</span><p>Da análise dos algoritmos<br>à observação dos resultados.</p></div>
+        </section>
+      </main>
+
+      <footer class="navigation" aria-label="Navegação da apresentação">
+        <div class="progress-info"><span id="slide-label">INÍCIO</span><span><strong id="current-slide">01</strong><span class="page-divider">/</span><span id="total-slides">02</span></span></div>
+        <div class="progress-track" aria-hidden="true"><span id="progress-fill"></span></div>
+        <div class="navigation-buttons">
+          <button id="previous" type="button" disabled><span aria-hidden="true">←</span> Voltar</button>
+          <button id="next" type="button">Avançar <span aria-hidden="true">→</span></button>
+        </div>
+        <p id="slide-status" class="sr-only" role="status" aria-live="polite" aria-atomic="true">Tela 1 de 2: Início</p>
+      </footer>
+    </div>
+  </body>
+</html>

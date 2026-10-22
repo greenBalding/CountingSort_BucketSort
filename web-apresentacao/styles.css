@@ -1,0 +1,83 @@
+:root { color-scheme: light; --paper: #f5f3eb; --ink: #243b31; --muted: #687269; --line: #d9ddd2; --accent: #bd5438; }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--paper); color: var(--ink); font-family: "Segoe UI", Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+button, a { -webkit-tap-highlight-color: transparent; }
+button { font: inherit; }
+.presentation { max-width: 880px; min-height: 100svh; margin: 0 auto; padding: 0 26px; display: flex; flex-direction: column; }
+.masthead { display: flex; align-items: center; justify-content: space-between; padding: 25px 0 20px; border-bottom: 1px solid var(--line); }
+.brand { display: flex; gap: 8px; align-items: center; color: inherit; text-decoration: none; font-size: 17px; font-weight: 750; letter-spacing: -.7px; }
+.brand-number { margin-left: 2px; font-size: 11px; font-weight: 500; color: var(--muted); }
+.brand-mark { width: 18px; height: 19px; display: flex; align-items: end; gap: 3px; margin-right: 2px; }
+.brand-mark i { display: block; width: 4px; height: 40%; background: var(--ink); }
+.brand-mark i:nth-child(2) { height: 70%; }
+.brand-mark i:nth-child(3) { height: 100%; background: var(--accent); }
+.edition, .eyebrow, .small-label, .art-heading, .progress-info { font-size: 10px; font-weight: 650; letter-spacing: 1.6px; }
+.edition { color: var(--muted); font-size: 9px; }
+main { flex: 1; display: flex; flex-direction: column; }
+.slide { padding: 32px 0 24px; animation: enter .3s ease-out; }
+.slide[hidden] { display: none; }
+.eyebrow { display: flex; gap: 8px; align-items: center; font-size: 8px; letter-spacing: 1.15px; }
+.eyebrow > span { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+h1, h2 { margin: 23px 0 0; font-family: Georgia, "Times New Roman", serif; font-weight: 400; font-size: clamp(48px, 13.6vw, 72px); line-height: .99; letter-spacing: -2.9px; }
+h1 em, h2 em { font-weight: 400; color: var(--accent); }
+.versus { color: var(--accent); font-size: .72em; margin-left: 7px; }
+h1:focus, h2:focus { outline: none; }
+.intro { margin: 20px 0 24px; font-size: 14px; line-height: 1.6; color: var(--muted); }
+.sorting-art { padding: 15px 18px 17px; background: #e9ece2; border: 1px solid #dce1d4; border-radius: 3px; }
+.art-heading { display: flex; justify-content: space-between; color: #667561; font-size: 8px; letter-spacing: 1.35px; }
+.art-heading > span:last-child { font-size: 15px; line-height: .7; }
+.bars-scene { height: 75px; display: flex; align-items: center; gap: 17px; margin-top: 8px; }
+.bars { display: flex; align-items: end; gap: 5px; width: 100%; height: 100%; border-bottom: 1px solid #bfc7b5; padding: 0 2px 5px; }
+.bars i { height: var(--height); flex: 1; background: #a0af96; border-radius: 2px 2px 0 0; }
+.sorted i { background: var(--ink); }
+.sorted i:last-child { background: var(--accent); }
+.art-arrow { color: #7b8972; font-size: 23px; }
+.authors { margin-top: 25px; }
+.small-label { color: var(--muted); font-size: 8px; letter-spacing: 1.4px; }
+.authors p { font-size: 13px; line-height: 1.8; margin: 7px 0 0; font-weight: 600; }
+.professor { margin: 14px 0 0; color: var(--muted); font-size: 9px; line-height: 1.6; }
+.professor span { white-space: nowrap; }
+.navigation { padding: 15px 0 max(20px, env(safe-area-inset-bottom)); border-top: 1px solid var(--line); }
+.progress-info { display: flex; justify-content: space-between; align-items: center; font-size: 8px; color: var(--muted); }
+.progress-info strong { color: var(--ink); font-weight: 650; }
+.page-divider { margin: 0 8px; color: #adb5a7; }
+.progress-track { height: 2px; background: #dfe2d7; margin: 11px 0 16px; }
+#progress-fill { display: block; height: 100%; width: 50%; background: var(--accent); transition: width .25s ease; }
+.navigation-buttons { display: flex; gap: 12px; }
+.navigation-buttons button { display: flex; justify-content: center; align-items: center; gap: 18px; width: 50%; min-height: 50px; border-radius: 4px; font-size: 13px; font-weight: 600; cursor: pointer; transition: background .2s, transform .2s; }
+#previous { background: transparent; color: var(--ink); border: 1px solid #cbd2c4; }
+#next { background: var(--ink); color: var(--paper); border: 1px solid var(--ink); }
+.navigation-buttons button:disabled { opacity: .35; cursor: default; }
+.navigation-buttons button:not(:disabled):active { transform: translateY(1px); }
+button:focus-visible, a:focus-visible { outline: 3px solid var(--accent); outline-offset: 4px; }
+.overview { padding-top: 40px; }
+h2 { font-size: clamp(43px, 11vw, 64px); line-height: 1.1; letter-spacing: -2px; }
+.overview-intro { max-width: 450px; font-size: 14px; line-height: 1.8; color: var(--muted); margin: 23px 0 26px; }
+.agenda { padding: 0; margin: 0; list-style: none; }
+.agenda li { display: flex; gap: 20px; border-top: 1px solid var(--line); padding: 22px 0; }
+.agenda-number { font-family: Georgia, serif; font-size: 17px; color: var(--accent); margin-top: 2px; }
+.agenda h3 { margin: 0 0 7px; font-size: 18px; font-weight: 550; }
+.agenda p { margin: 0; font-size: 12px; color: var(--muted); line-height: 1.7; }
+.chapter-note { display: flex; gap: 16px; align-items: center; padding: 17px 20px; margin-top: 7px; background: #e9ece2; }
+.chapter-note > span { font-size: 29px; color: var(--accent); }
+.chapter-note p { margin: 0; font-family: Georgia, serif; font-style: italic; font-size: 16px; line-height: 1.5; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+@keyframes enter { from { opacity: 0; transform: translateY(7px); } to { opacity: 1; transform: translateY(0); } }
+@media (min-width: 700px) {
+  .presentation { padding: 0 48px; }
+  .masthead { padding-top: 32px; }
+  .slide { padding-top: 40px; padding-bottom: 35px; }
+  .cover { display: grid; grid-template-columns: 1.15fr 1fr; column-gap: 45px; align-items: start; }
+  .cover .eyebrow { grid-column: 1 / -1; }
+  .cover h1 { grid-column: 1; grid-row: 2 / 4; }
+  .cover .intro { grid-column: 1; margin-top: 24px; }
+  .sorting-art { grid-column: 2; grid-row: 2; margin-top: 27px; }
+  .bars-scene { height: 100px; }
+  .authors { grid-column: 2; grid-row: 3; margin-top: 28px; }
+  .professor { grid-column: 2; margin-top: 0; }
+  .eyebrow { font-size: 10px; }
+  .navigation-buttons { max-width: 360px; margin-left: auto; }
+  .agenda { max-width: 540px; }
+  .chapter-note { max-width: 540px; }
+}
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }

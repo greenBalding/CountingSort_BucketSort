@@ -36,9 +36,28 @@ A comparação considera os tempos de execução para diferentes quantidades de 
 - [ ] **Item b:** Implementação em C com medição de tempo de execução
 - [ ] **Item c:** Testes com entradas aleatórias + planilha Excel + gráfico de linhas
 - [ ] **Item d:** Testes de melhor e pior caso + planilha Excel + gráfico de linhas
-- [ ] **Item e:** Descrição da máquina de teste (CPU, RAM, modelo)
+- [x] **Item e:** Descrição da máquina de teste (CPU, RAM, modelo)
 - [ ] **Item f:** Teste opcional com 1.000.000 para melhor/pior/aleatório
 - [ ] **Item g:** Conclusões obtidas para discussão em sala e relatório final
+
+---
+
+## Organização do projeto
+
+- [`cod-implementacao`](cod-implementacao/): implementação em C do Bucket Sort, demonstração, validação e execução dos experimentos.
+- [`db-resultados`](db-resultados/): medições experimentais do Bucket Sort, planilha Excel, gráficos e registros da execução.
+- [`web-apresentacao`](web-apresentacao/): apresentação web com navegação por telas e interface adaptada para dispositivos móveis.
+- [`doc-referencia`](doc-referencia/): livros, enunciado da atividade e [descrição do computador utilizado](doc-referencia/pc-utilizado.txt).
+
+As instruções de compilação e os cenários de teste estão no [guia da implementação](cod-implementacao/README.md). A implementação e as medições desta etapa correspondem ao Bucket Sort.
+
+Para visualizar a apresentação localmente, execute na raiz do projeto:
+
+```powershell
+py -m http.server 4173 --bind 127.0.0.1 --directory web-apresentacao
+```
+
+Depois, acesse `http://127.0.0.1:4173`. A publicação no GitHub Pages está configurada em [`.github/workflows/pages.yml`](.github/workflows/pages.yml), com origem na pasta `web-apresentacao`. Para publicar pelo workflow, a origem do GitHub Pages deve estar definida como **GitHub Actions** nas configurações do repositório.
 
 ---
 

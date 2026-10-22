@@ -2,6 +2,11 @@
 
 **[Acessar a apresentação online](https://greenbalding.github.io/CountingSort_BucketSort/)**
 
+<p align="center">
+  <a href="https://greenbalding.github.io/CountingSort_BucketSort/"><img src="doc-entrega/qrcode_apresentacao.png" alt="QR code para a apresentação online" width="220"></a><br>
+  <sub>Aponte a câmera do celular para abrir a apresentação</sub>
+</p>
+
 **Disciplina:** Projeto e Análise de Algoritmos 1 (CMP 1065)  
 **Professor:** Prof. MSc. Anibal Santos Jukemura  
 **Alunos:** Ludmila Lima do Espirito Santo e Matheus Silva Pains  

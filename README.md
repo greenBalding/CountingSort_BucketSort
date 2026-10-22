@@ -34,26 +34,39 @@ A comparação considera os tempos de execução para diferentes quantidades de 
 
 ## Checklist de Entregas
 
-- [ ] **Item a:** Tempos teóricos de melhor e pior caso em notação $\Theta$
-- [ ] **Item b:** Implementação em C com medição de tempo de execução
-- [ ] **Item c:** Testes com entradas aleatórias + planilha Excel + gráfico de linhas
-- [ ] **Item d:** Testes de melhor e pior caso + planilha Excel + gráfico de linhas
+- [x] **Item a:** Análise dos dois algoritmos em notação $\Theta$
+- [x] **Item b:** Implementações em C com medição e validação da saída
+- [x] **Item c:** Testes aleatórios, planilha Excel e gráficos de linhas
+- [x] **Item d:** Testes de melhor e pior caso, planilha Excel e gráficos de linhas
 - [x] **Item e:** Descrição da máquina de teste (CPU, RAM, modelo)
-- [ ] **Item f:** Teste opcional com 1.000.000 para melhor/pior/aleatório
-- [ ] **Item g:** Conclusões obtidas para discussão em sala e relatório final
+- [x] **Item f:** Testes com 1.000.000 nos três cenários para ambos os algoritmos
+- [x] **Item g:** Conclusões e relatório final preparados em PDF
+- [ ] Imprimir as conclusões para distribuir aos alunos, conforme o item g.
+
+## Entregas
+
+- [Relatório final: itens A a G](doc-entrega/relatorio_final.pdf).
+- [Conclusões para impressão e distribuição](doc-entrega/conclusoes.pdf).
+- [Planilha Excel com medições, estatísticas e gráficos](db-resultados/comparacao_resultados.xlsx).
+- [Medições individuais](db-resultados/comparacao_medicoes.csv) e [registro da execução](db-resultados/execucao_comparacao.txt).
+
+Os algoritmos ordenam cópias das mesmas entradas inteiras de 32 bits, com faixa conhecida `K = 10n` e valores em `[0, K)`. O Bucket Sort utiliza `b = n` baldes e Insertion Sort interno. Foram realizadas três repetições para cada algoritmo, cenário e tamanho: 10, 100, 1.000, 5.000, 10.000, 50.000, 100.000, 500.000 e 1.000.000, totalizando **162 medições** verificadas contra `qsort`.
+
+No Counting Sort, melhor e pior caso custam $\Theta(n+K)$; nesta configuração, $\Theta(n)$. No Bucket Sort, um elemento por balde produz melhor caso $\Theta(n)$. Concentrar a entrada no primeiro balde, com metade dos valores iguais a 1 seguida de metade igual a 0, exige $n^2/4$ deslocamentos e demonstra pior caso $\Theta(n^2)$. Os nomes dos cenários descrevem a distribuição compartilhada pelos dois algoritmos.
 
 ---
 
 ## Organização do projeto
 
-- [`cod-implementacao`](cod-implementacao/): implementação em C do Bucket Sort, demonstração, validação e execução dos experimentos.
-- [`db-resultados`](db-resultados/): medições experimentais do Bucket Sort, planilha Excel, gráficos e registros da execução.
+- [`cod-implementacao`](cod-implementacao/): implementações em C dos dois algoritmos, demonstração, validação e experimentos.
+- [`db-resultados`](db-resultados/): medições, planilha Excel, gráficos e registros da execução.
+- [`doc-entrega`](doc-entrega/): relatório final e conclusões para impressão.
 - [`web-apresentacao`](web-apresentacao/): apresentação web com navegação por telas e interface adaptada para dispositivos móveis.
 - [`doc-referencia`](doc-referencia/): livros, enunciado da atividade e [descrição do computador utilizado](doc-referencia/pc-utilizado.txt).
 
-As instruções de compilação e os cenários de teste estão no [guia da implementação](cod-implementacao/README.md). A implementação e as medições desta etapa correspondem ao Bucket Sort.
+As instruções de compilação e os cenários de teste estão no [guia da implementação](cod-implementacao/README.md). Os arquivos anteriores de Bucket Sort com valores `double` estão preservados como histórico; suas medições não integram a comparação atual.
 
-A apresentação segue os itens A a G, com análise teórica, simulação por etapas, trechos do código em C, gráficos das medições, configuração da máquina e conclusões para impressão. A seção de Counting Sort está identificada como uma etapa ainda pendente.
+A apresentação permite começar por qualquer algoritmo e segue os itens A a G, com análise teórica, simulações por etapas, código em C, gráficos, configuração da máquina e conclusões.
 
 Para visualizar a apresentação localmente, execute na raiz do projeto:
 

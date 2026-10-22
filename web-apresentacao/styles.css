@@ -243,3 +243,11 @@ a{color:black}
 }
 
 .demo-controls .button{min-width:0;font-size:13px;padding:8px 10px}
+
+.algorithm-switch{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:15px 0;border-bottom:1px solid var(--line)}
+.algorithm-switch label{font-size:11px;color:var(--muted)}
+.algorithm-switch select{min-width:0;max-width:62%;min-height:44px;padding:8px 12px;border:1px solid #bfc9b7;background:var(--white);color:var(--ink);border-radius:4px;font-size:14px}
+@media(max-width:360px){.presentation{padding-left:16px;padding-right:16px}.segmented button{font-size:12px}.comparison strong{font-size:19px}.algorithm-switch label{max-width:85px}.number-chip{min-width:34px}}
+@media print{.algorithm-switch{display:none!important}.result-controls{display:none!important}#conclusoes .comparison{break-inside:avoid}#conclusoes .lead{color:black}}
+
+.complexity{flex-wrap:wrap;row-gap:7px}.complexity>span:first-child{white-space:nowrap}

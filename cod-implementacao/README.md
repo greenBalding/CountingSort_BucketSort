@@ -1,69 +1,63 @@
-# Implementação do Bucket Sort
+# Implementação e experimentos
 
-A implementação em C ordena valores `double` no intervalo global fixo `[0, 1)`. Os valores são distribuídos em `k` baldes por intervalos uniformes, e cada balde é ordenado com Insertion Sort. Nos experimentos, `k = n`.
+Counting Sort estável e Bucket Sort com Insertion Sort interno ordenam valores `uint32_t` na faixa conhecida `[0, K)`. Counting Sort utiliza contagens acumuladas e percorre a entrada em ordem inversa para preencher a saída. Bucket Sort distribui os valores de forma estável em segmentos de um vetor auxiliar e aplica Insertion Sort em cada segmento.
 
-Os baldes ocupam segmentos de um único vetor auxiliar. Contagens e posições delimitam esses segmentos, evitando reservar `n` posições para cada balde. O algoritmo usa memória auxiliar Θ(n + k) e preserva a ordem relativa de elementos iguais.
+## Arquivos principais
 
-## Arquivos
+- `counting_sort.c/h`: Counting Sort estável, tempo e memória auxiliar Θ(n + K).
+- `bucket_sort_int.c/h`: Bucket Sort inteiro, memória auxiliar Θ(n + b).
+- `benchmark_comparacao.c`: demonstração, entradas compartilhadas, cronômetro e verificação com `qsort`.
+- `test_comparacao.c`: casos de borda, parâmetros inválidos e comparação com `qsort` em 771 grupos de entradas para cada algoritmo.
+- `executar-comparacao.ps1`: compilação e execução com GCC no Windows.
+- `gerar_comparacao.mjs`: planilha Excel com fórmulas e gráficos.
+- `gerar_relatorio.py`: relatório e conclusões em PDF a partir do CSV.
+- `preparar-apresentacao.mjs`: dados e trechos reais de C para a apresentação.
 
-- `bucket_sort.h` e `bucket_sort.c`: interface e implementação do algoritmo.
-- `benchmark.c`: demonstração, geração dos cenários, medição e verificação dos resultados.
-- `test_bucket_sort.c`: validação com casos de borda e comparação independente com `qsort`.
-- `executar-testes.ps1`: compilação e execução no Windows com GCC.
-- `gerar_planilha.mjs`: conversão das medições em planilha Excel com fórmulas e gráficos.
-- `preparar-apresentacao.mjs`: atualização dos dados e trechos de código usados na apresentação web, a partir do CSV e dos fontes em C.
+## Executar
 
-## Compilação e execução
-
-Na raiz do repositório, com GCC disponível no `PATH`, execute no PowerShell:
-
-```powershell
-# Compila, valida e exibe uma demonstração; não executa os experimentos completos.
-.\cod-implementacao\executar-testes.ps1 -SomenteValidar
-
-# Executa três repetições para cada cenário e tamanho obrigatório.
-.\cod-implementacao\executar-testes.ps1 -Repeticoes 3
-
-# Repete somente a demonstração após compilar.
-.\cod-implementacao\build\bucket_sort.exe --demo
-```
-
-O script interrompe a execução se o CSV de medições já existir. Para realizar uma nova rodada, renomeie os resultados anteriores antes de executar novamente. Os executáveis ficam em `build/`, ignorada pelo Git.
-
-Para compilar manualmente a demonstração e o benchmark:
+Na raiz do repositório, com GCC no `PATH`, execute no PowerShell:
 
 ```powershell
-gcc -std=c11 -O2 -Wall -Wextra -Wpedantic cod-implementacao/bucket_sort.c cod-implementacao/benchmark.c -o cod-implementacao/build/bucket_sort.exe -lm
+# Compila, valida e demonstra os dois algoritmos.
+.\cod-implementacao\executar-comparacao.ps1 -SomenteValidar
+
+# Executa a rodada completa, incluindo os testes opcionais com 1 milhão.
+.\cod-implementacao\executar-comparacao.ps1 -Repeticoes 3
 ```
 
-O diretório `cod-implementacao/build` deve existir antes dessa compilação manual. A opção `--output caminho.csv 3` executa os experimentos com três repetições e grava as medições no arquivo indicado; essa opção direta substitui um arquivo existente.
+O script interrompe a execução se `comparacao_medicoes.csv` já existir. Para outra rodada, preserve os arquivos anteriores em outro local. Os executáveis são gerados em `build/`, ignorada pelo Git. O pior caso de Bucket Sort pode levar vários minutos.
 
-## Cenários experimentais
+Compilação manual, após criar `cod-implementacao/build`:
 
-| Cenário | Geração dos dados | Justificativa |
+```powershell
+gcc -std=c11 -O2 -Wall -Wextra -Wpedantic cod-implementacao/counting_sort.c cod-implementacao/bucket_sort_int.c cod-implementacao/benchmark_comparacao.c -o cod-implementacao/build/comparacao.exe
+.\cod-implementacao\build\comparacao.exe --demo
+```
+
+## Protocolo
+
+Usam-se `K = 10n`, `b = n` baldes e nove tamanhos em todos os cenários: 10, 100, 1.000, 5.000, 10.000, 50.000, 100.000, 500.000 e 1.000.000. Cada combinação é executada três vezes por algoritmo, totalizando 162 medições.
+
+| Cenário | Entrada compartilhada | Efeito no Bucket Sort |
 | --- | --- | --- |
-| Aleatório | Valores pseudoaleatórios em `[0, 1)`, gerados com SplitMix64 e 53 bits de precisão; a semente é registrada por repetição. | Distribuição aproximadamente uniforme entre os baldes. |
-| Melhor caso | Valor `(i + 0,5) / n` para cada índice `i`, com embaralhamento antes da ordenação. | Cada balde recebe exatamente um elemento; a ordenação interna não realiza deslocamentos. |
-| Pior caso | Valor `((n - i) - 0,5) / n²` para cada índice `i`. | Valores distintos em ordem decrescente, todos no intervalo `[0, 1/n)`, portanto no primeiro balde. |
+| Aleatório | SplitMix64 módulo K, com semente registrada | Distribuição aproximadamente uniforme |
+| Melhor | Valores `10*i + 5` embaralhados | Um elemento por balde; Θ(n) |
+| Pior | Metade dos valores iguais a 1 seguida de metade igual a 0 | Primeiro balde; n²/4 deslocamentos; Θ(n²) |
 
-A faixa global permanece `[0, 1)` em todos os cenários. O algoritmo não recalcula mínimo e máximo da entrada: fazer isso no pior caso espalharia novamente os valores, alterando o cenário analisado.
+A entrada de pior caso demonstra crescimento quadrático, embora não maximize a constante entre todas as entradas possíveis. O intervalo global permanece fixo durante cada ordenação. Counting Sort executa Θ(n + K) em todos os cenários; com K = 10n, Θ(n).
 
-Com `k = n`, o melhor caso custa Θ(n). No pior caso, o Insertion Sort de um único balde realiza `n(n−1)/2` deslocamentos, resultando em Θ(n²). A memória auxiliar é Θ(n).
+`QueryPerformanceCounter` mede a chamada inteira: alocação, distribuição, ordenação, cópia final e liberação. Geração, cópia inicial, referência com `qsort`, validação e gravação ficam fora do tempo. Há aquecimento com 1.000 elementos nos dois algoritmos. A ordem das execuções é alternada e as medições são sequenciais. Todas as saídas devem estar ordenadas e ser exatamente iguais à referência.
 
-## Medição e corretude
-
-O tempo decorrido é obtido com `QueryPerformanceCounter` no Windows. A medição inclui a chamada completa a `bucket_sort`: alocação, distribuição, ordenação interna, cópia da saída e liberação da memória. A geração das entradas, a ordenação de referência com `qsort`, as verificações e a gravação no CSV ficam fora do trecho medido.
-
-Cada execução deve produzir uma saída crescente e exatamente igual ao vetor ordenado com `qsort`. Falhas interrompem o experimento. Há uma chamada de aquecimento com 1.000 elementos aleatórios antes das medições registradas. As medições são executadas sequencialmente; o pior caso de 500.000 elementos pode levar vários minutos considerando as três repetições.
-
-Os registros ficam em [`../db-resultados`](../db-resultados/). Os dados da máquina estão em [`pc-utilizado.txt`](../doc-referencia/pc-utilizado.txt).
-
-## Atualização da apresentação
-
-Depois de atualizar as medições ou os fontes em C, execute na raiz do repositório:
+## Artefatos derivados
 
 ```powershell
+node cod-implementacao/gerar_comparacao.mjs
+py cod-implementacao/gerar_relatorio.py
 node cod-implementacao/preparar-apresentacao.mjs
 ```
 
-O script valida as 75 medições e gera `web-apresentacao/dados.js`. A publicação pelo GitHub Pages também executa essa atualização. Os valores experimentais não são editados manualmente no código da interface.
+O gerador de Excel requer `@oai/artifact-tool` no ambiente Node de geração. O relatório requer ReportLab, Matplotlib e pypdf. A apresentação usa somente Node e arquivos locais; o workflow de publicação regenera seus dados automaticamente.
+
+## Histórico
+
+`bucket_sort.c/h`, `benchmark.c`, `test_bucket_sort.c`, `executar-testes.ps1` e `gerar_planilha.mjs` pertencem à rodada anterior de Bucket Sort com `double` em `[0, 1)`. Os resultados históricos não são combinados com o experimento inteiro atual.

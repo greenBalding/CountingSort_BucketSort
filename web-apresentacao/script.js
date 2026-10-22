@@ -6,10 +6,15 @@ const integer = value => value.toLocaleString('pt-BR', {maximumFractionDigits: 0
 const decimal = (value, digits = 3) => value.toLocaleString('pt-BR', {maximumFractionDigits: digits});
 const menu = $('chapter-menu');
 let current = 0;
+let algorithm = new URLSearchParams(location.search).get('algoritmo') === 'counting_sort' ? 'counting_sort' : 'bucket_sort_insertion_int';
+const isCounting = () => algorithm === 'counting_sort';
+const algorithmName = () => isCounting() ? 'Counting Sort' : 'Bucket Sort';
+let groups;
 
 function showSlide(index, focus = false, updateUrl = true) {
   current = Math.max(0, Math.min(index, slides.length - 1));
   slides.forEach((slide, i) => { slide.hidden = i !== current; });
+  $('algorithm-switch').hidden = current < 2 || current > 8;
   $('previous').disabled = current === 0;
   $('next').disabled = current === slides.length - 1;
   $('current-slide').textContent = String(current + 1).padStart(2, '0');
@@ -32,6 +37,8 @@ function go(id) {
   if (index >= 0) showSlide(index, true);
 }
 function followHash() {
+  const requested = new URLSearchParams(location.search).get('algoritmo') === 'counting_sort' ? 'counting_sort' : 'bucket_sort_insertion_int';
+  if (requested !== algorithm) selectAlgorithm(requested);
   const index = slides.findIndex(slide => `#${slide.id}` === location.hash);
   showSlide(index < 0 ? 0 : index, false, false);
 }
@@ -41,12 +48,9 @@ function pressed(selector, attribute, value) {
 $('previous').addEventListener('click', () => showSlide(current - 1, true));
 $('next').addEventListener('click', () => showSlide(current + 1, true));
 document.querySelector('.brand').addEventListener('click', event => { event.preventDefault(); go('inicio'); });
-$('choose-bucket').addEventListener('click', () => go('analise'));
-$('choose-counting').addEventListener('click', () => {
-  const open = $('counting-note').hidden;
-  $('counting-note').hidden = !open;
-  $('choose-counting').setAttribute('aria-expanded', String(open));
-});
+$('choose-bucket').addEventListener('click', () => { selectAlgorithm('bucket_sort_insertion_int'); go('analise'); });
+$('choose-counting').addEventListener('click', () => { selectAlgorithm('counting_sort'); go('analise'); });
+$('active-algorithm').addEventListener('change', () => selectAlgorithm($('active-algorithm').value));
 $('chapter-links').replaceChildren(...slides.map(slide => {
   const button = document.createElement('button');
   button.dataset.go = slide.id;
@@ -66,81 +70,81 @@ window.addEventListener('hashchange', followHash);
 
 function drawTheory(scenario) {
   pressed('[data-theory]', 'theory', scenario);
-  const worst = scenario === 'pior';
-  $('complexity-value').textContent = worst ? 'Θ(n²)' : 'Θ(n)';
-  $('complexity-name').textContent = worst ? 'crescimento quadrático' : 'crescimento linear';
+  const worst = scenario === 'pior', counting = isCounting();
+  $('theory-intro').textContent = counting ? 'Counting Sort estável, com contagens acumuladas e vetor auxiliar. n é a quantidade de elementos; K é a quantidade de chaves possíveis.' : 'Bucket Sort com n baldes por intervalos e Insertion Sort em cada balde. Nesta implementação, K = 10n e cada balde cobre dez chaves.';
+  $('complexity-value').textContent = counting ? 'Θ(n + K)' : worst ? 'Θ(n²)' : 'Θ(n)';
+  $('complexity-name').textContent = counting ? 'mesmo custo nos dois casos' : worst ? 'crescimento quadrático' : 'crescimento linear';
   $('theory-buckets').replaceChildren(...Array.from({length: 8}, (_, index) => {
-    const bucket = document.createElement('div');
-    bucket.className = `theory-bin${worst && index === 0 ? ' crowded' : ''}`;
-    const count = worst ? (index === 0 ? 8 : 0) : 1;
-    bucket.setAttribute('aria-label', `Balde ${index + 1}: ${count} ${count === 1 ? 'elemento' : 'elementos'}`);
-    bucket.innerHTML = '<span class="dot" aria-hidden="true"></span>'.repeat(count);
+    const bucket = document.createElement('div'); bucket.className = `theory-bin${worst && !counting && index === 0 ? ' crowded' : ''}`;
+    const count = counting ? 1 : worst ? (index === 0 ? 8 : 0) : 1;
+    bucket.setAttribute('aria-label', counting ? `Posição ${index} do vetor de contagem` : `Balde ${index}: ${count} elementos`);
+    if (counting) bucket.textContent = index === 0 || index === 1 ? '4' : '0';
+    else bucket.innerHTML = '<span class="dot" aria-hidden="true"></span>'.repeat(count);
     return bucket;
   }));
-  $('theory-explanation').textContent = worst ? 'Todos os valores distintos chegam em ordem decrescente ao mesmo balde. O Insertion Sort precisa deslocar os anteriores a cada inserção.' : 'Um elemento em cada balde. Inicializar, distribuir e reunir os valores responde pelo custo total.';
-  $('theory-formula').textContent = worst ? '1 + 2 + … + (n − 1) = n(n − 1)/2 deslocamentos' : 'n elementos: trabalho proporcional a n';
+  $('theory-explanation').textContent = counting ? 'Inicializar e acumular K contagens custa Θ(K). Contar e posicionar n elementos custa Θ(n), independentemente da ordem de entrada.' : worst ? 'Metade dos valores são 1; depois chegam os valores 0. Todos entram no primeiro balde. Cada zero atravessa todos os uns no Insertion Sort.' : 'As chaves 10i + 5, para i de 0 a n − 1, são embaralhadas: cada balde recebe um elemento. Inicializar, distribuir e reunir custa Θ(n).';
+  $('theory-formula').textContent = counting ? 'Θ(K) + Θ(n) = Θ(n + K); com K = 10n, Θ(n)' : worst ? '(n/2) × (n/2) = n²/4 deslocamentos' : 'n baldes + n elementos: trabalho proporcional a n';
+  $('theory-note').textContent = counting ? 'Mantidos n e K, melhor e pior caso têm a mesma complexidade. Uma faixa muito grande pode tornar a contagem cara mesmo com poucos elementos.' : 'Concentrar valores em um balde não basta: a ordem precisa produzir muitas inversões. Não é necessário que todos os valores sejam distintos.';
+  $('memory-cost').textContent = counting ? 'Θ(n + K)' : 'Θ(n)';
 }
 document.querySelectorAll('[data-theory]').forEach(button => button.addEventListener('click', () => drawTheory(button.dataset.theory)));
-
-const demoInputs = {exemplo: [.42,.15,.87,.33,.08,.71], melhor: [.7,.1,.9,.3,.5], pior: [.09,.08,.07,.06,.05,.04]};
+const demoInputs = {exemplo: [22,11,43,11,4,35], melhor: [35,5,45,15,25], pior: [1,1,1,0,0,0]};
 let demoCase = 'exemplo', demoStep = 0;
 function insertionSort(values) {
   const result = values.slice();
-  for (let i = 1; i < result.length; i++) {
-    const key = result[i]; let j = i;
-    while (j > 0 && result[j - 1] > key) { result[j] = result[j - 1]; j--; }
-    result[j] = key;
-  }
+  for (let i = 1; i < result.length; i++) { const key = result[i]; let j = i; while (j > 0 && result[j - 1] > key) { result[j] = result[j - 1]; j--; } result[j] = key; }
   return result;
 }
-function chip(value, className = '') {
-  const element = document.createElement('span');
-  element.className = `number-chip ${className}`;
-  element.textContent = value.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2});
-  return element;
-}
+function chip(value, className = '') { const element = document.createElement('span'); element.className = `number-chip ${className}`; element.textContent = integer(value); return element; }
 function drawDemo() {
-  const input = demoInputs[demoCase], count = input.length;
+  const input = demoInputs[demoCase], count = input.length, counting = isCounting();
+  $('demo-intro').textContent = counting ? 'Conte as ocorrências de cada chave, acumule as contagens e posicione os valores de trás para frente. Só exibimos as chaves presentes; as demais têm contagem zero.' : 'Cinco baldes de dez chaves para visualizar a distribuição. Depois, Insertion Sort em cada intervalo e reunião da saída.';
+  $('demo-input').replaceChildren(...input.map((value, i) => chip(value, i < demoStep ? 'processed' : i === demoStep ? 'active' : '')));
   const buckets = Array.from({length: 5}, () => []);
-  input.slice(0, Math.min(count, demoStep)).forEach(value => buckets[Math.min(4, Math.floor(value * 5))].push(value));
+  input.slice(0, Math.min(count, demoStep)).forEach(value => buckets[Math.floor(value / 10)].push(value));
   if (demoStep > count) buckets.forEach((values, i) => { buckets[i] = insertionSort(values); });
-  $('demo-input').replaceChildren(...input.map((value, i) => chip(value, i < demoStep ? 'processed' : (i === demoStep ? 'active' : ''))));
-  $('demo-buckets').replaceChildren(...buckets.map((values, i) => {
-    const row = document.createElement('div'); row.className = 'demo-bucket';
-    const range = document.createElement('span'); range.className = 'bucket-range';
-    range.textContent = `[${decimal(i / 5, 1)}; ${decimal((i + 1) / 5, 1)})`;
-    const contents = document.createElement('div'); contents.className = 'bucket-content';
-    contents.setAttribute('aria-label', `Balde ${i + 1}`);
-    contents.replaceChildren(...values.map(value => chip(value)));
-    row.append(range, contents); return row;
-  }));
-  const message = demoStep === 0 ? 'Toque abaixo para distribuir um número por vez.' : demoStep <= count ? `${chip(input[demoStep - 1]).textContent} foi para o balde ${Math.floor(input[demoStep - 1] * 5) + 1}. ${demoStep} de ${count} valores distribuídos.` : demoStep === count + 1 ? 'Cada balde foi ordenado com Insertion Sort. Agora podemos reunir os intervalos.' : 'Pronto: percorrer os baldes em ordem produz a saída crescente.';
-  $('demo-message').textContent = message;
-  $('demo-step').textContent = demoStep < count ? 'Distribuir próximo' : demoStep === count ? 'Ordenar baldes' : demoStep === count + 1 ? 'Reunir resultado' : 'Concluído';
-  $('demo-step').disabled = demoStep >= count + 2;
-  $('demo-output').hidden = demoStep < count + 2;
-  $('demo-output-values').replaceChildren(...buckets.flat().map(value => chip(value)));
+  let rows, output = insertionSort(input), placed = 0, lastPlacement = '';
+  if (counting) {
+    const keys = [...new Set(input)].sort((a,b) => a-b);
+    let cumulative = 0;
+    const counts = new Map(keys.map(key => [key, input.slice(0,Math.min(count,demoStep)).filter(v=>v===key).length]));
+    if (demoStep > count) for (const key of keys) { cumulative += counts.get(key); counts.set(key,cumulative); }
+    output = Array(count).fill(null);
+    placed = Math.max(0,Math.min(count,demoStep-count-1));
+    for(let i=count-1;i>=count-placed;i--) { const key=input[i], position=counts.get(key)-1;counts.set(key,position);output[position]=key;lastPlacement=`A chave ${key} da posição ${i} foi para a posição ${position} da saída. A contagem foi decrementada.`; }
+    rows = keys.map(key=>[`Chave ${key}`,[counts.get(key)]]);
+  } else rows = buckets.map((values,i) => [`${i*10} a ${i*10+9}`, values]);
+  $('demo-buckets').replaceChildren(...rows.map(([label, values]) => { const row=document.createElement('div');row.className='demo-bucket'; const range=document.createElement('span');range.className='bucket-range';range.textContent=label;const contents=document.createElement('div');contents.className='bucket-content';contents.replaceChildren(...values.map(v=>chip(v)));row.append(range,contents);return row; }));
+  $('demo-message').textContent = demoStep === 0 ? (counting ? 'Cada chave começa com contagem zero. Conte um elemento por toque.' : 'Distribua um número por toque.') : demoStep <= count ? (counting ? `Contada a chave ${input[demoStep-1]}. ${demoStep} de ${count} elementos.` : `${input[demoStep-1]} foi para o balde ${Math.floor(input[demoStep-1]/10)}.`) : demoStep === count+1 ? (counting ? 'Contagens acumuladas: cada número indica o fim do trecho reservado às chaves até este valor.' : 'Cada balde está ordenado com Insertion Sort.') : (counting ? lastPlacement : 'Reunir os baldes em ordem produz a saída crescente.');
+  const completed = counting ? demoStep >= count*2+1 : demoStep >= count+2;
+  $('demo-step').textContent = completed ? 'Concluído' : demoStep < count ? (counting ? 'Contar próximo' : 'Distribuir próximo') : demoStep === count ? (counting ? 'Acumular contagens' : 'Ordenar baldes') : (counting ? 'Posicionar próximo' : 'Reunir resultado');
+  $('demo-step').disabled = completed;
+  $('demo-output').hidden = demoStep < count+2;
+  $('demo-output-values').replaceChildren(...output.map(v=>v===null?Object.assign(document.createElement('span'),{className:'number-chip',textContent:'vazio'}):chip(v)));
 }
-$('demo-step').addEventListener('click', () => { demoStep++; drawDemo(); });
-$('demo-reset').addEventListener('click', () => { demoStep = 0; drawDemo(); });
+$('demo-step').addEventListener('click',()=>{demoStep++;drawDemo();});
+$('demo-reset').addEventListener('click',()=>{demoStep=0;drawDemo();});
 document.querySelectorAll('[data-demo]').forEach(button => button.addEventListener('click', () => { demoCase = button.dataset.demo; demoStep = 0; pressed('[data-demo]', 'demo', demoCase); drawDemo(); }));
 
-const codeNotes = {distribuir:'O índice identifica o intervalo do valor. A próxima posição livre desse balde recebe o elemento, preservando a ordem de chegada.', ordenar:'Cada trecho é ordenado separadamente. O laço while desloca os valores maiores que a chave: é aqui que o pior caso concentra o esforço.', medir:'O relógio é lido antes e depois da chamada completa ao Bucket Sort. A diferença é o tempo decorrido, em segundos.'};
+const codeNotes = {distribuir: 'Primeiro trecho da implementação usada no experimento. Counting Sort registra frequências; Bucket Sort distribui os valores nos intervalos.', ordenar: 'Counting Sort usa contagens acumuladas para posicionar a saída estável. Bucket Sort usa Insertion Sort em cada trecho.', medir: 'O relógio é lido antes e depois da chamada completa. Geração, cópia da entrada e validação ficam fora do intervalo.'};
 function drawCode(key) {
   pressed('[data-code]', 'code', key);
-  $('code-excerpt').textContent = EXPERIMENT_DATA.code[key];
+  const code = EXPERIMENT_DATA.code[algorithm][key];
+  $('code-excerpt').textContent = code;
   $('code-explanation').textContent = codeNotes[key];
-  $('code-file').textContent = key === 'medir' ? 'benchmark.c' : 'bucket_sort.c';
+  $('code-file').textContent = key === 'medir' ? 'benchmark_comparacao.c' : isCounting() ? 'counting_sort.c' : 'bucket_sort_int.c';
+  $('code-intro').textContent = isCounting() ? 'Contagens acumuladas e percurso inverso preservam a ordem relativa das chaves iguais. O vetor auxiliar tem n posições e a contagem tem K posições.' : 'Os baldes são trechos de um vetor auxiliar. As contagens organizam os trechos; a ordenação interna é feita com Insertion Sort.';
+  $('source-code-link').href = 'https://github.com/greenBalding/CountingSort_BucketSort/blob/main/cod-implementacao/' + (isCounting() ? 'counting_sort.c' : 'bucket_sort_int.c');
 }
 document.querySelectorAll('[data-code]').forEach(button => button.addEventListener('click', () => drawCode(button.dataset.code)));
-
 const records = EXPERIMENT_DATA.measurements;
-const groups = Object.fromEntries(['aleatorio','melhor','pior'].map(scenario => [scenario,
-  [...new Set(records.filter(row => row.scenario === scenario).map(row => row.n))].sort((a,b) => a-b).map(n => {
-    const rows = records.filter(row => row.scenario === scenario && row.n === n);
-    const values = rows.map(row => row.seconds).sort((a,b) => a-b);
-    return {n, rows, mean: values.reduce((sum,value) => sum+value,0)/values.length, median: values[1]};
-  })]));
+function buildGroups(name) {
+  return Object.fromEntries(['aleatorio','melhor','pior'].map(scenario => [scenario,
+    [...new Set(records.filter(row => row.algorithm===name && row.scenario===scenario).map(row=>row.n))].sort((a,b)=>a-b).map(n=>{
+      const rows=records.filter(row=>row.algorithm===name && row.scenario===scenario && row.n===n), values=rows.map(row=>row.seconds).sort((a,b)=>a-b);
+      return {n,rows,mean:values.reduce((sum,value)=>sum+value,0)/values.length,median:values[Math.floor(values.length/2)]};
+    })]));
+}
 function time(value) {
   const factor = value >= 1 ? 1 : value >= .001 ? 1000 : 1000000;
   return {value: decimal(value * factor), unit: factor === 1 ? 's' : factor === 1000 ? 'ms' : 'µs'};
@@ -185,7 +189,7 @@ function drawResult(prefix, scenario) {
     $('compare-best').textContent = formattedTime(best); $('compare-worst').textContent = formattedTime(worst);
     const ratio = worst/best;
     $('compare-ratio').textContent = ratio >= 1 ? `Nesta amostra, o pior caso levou ${decimal(ratio,1)} vezes o tempo do melhor caso.` : 'Nesta amostra pequena, o tempo do pior caso ficou abaixo do melhor. A variação da medição não altera a análise teórica.';
-    $('cases-description').textContent = scenario === 'melhor' ? 'Um elemento por balde; a entrada foi embaralhada antes da ordenação.' : 'Valores distintos decrescentes, todos no primeiro balde. A faixa global permanece [0, 1).';
+    $('cases-description').textContent = scenario === 'melhor' ? 'Chaves 10i + 5 embaralhadas: um elemento por balde. Counting Sort recebe a mesma entrada.' : 'Primeira metade: valores 1. Segunda metade: valores 0. Todos no primeiro balde. São n²/4 inversões. Counting Sort recebe os mesmos dois blocos.';
   }
 }
 ['random-n','random-stat'].forEach(id => $(id).addEventListener('change',()=>drawResult('random','aleatorio')));
@@ -205,19 +209,32 @@ for (const prefix of ['random','cases']) {
 }
 function drawGrowth(n) {
   pressed('[data-growth]','growth',String(n));
-  $('growth-value').textContent = integer(n*(n-1)/2);
-  $('growth-note').textContent = n===500000 ? 'Este tamanho foi medido no pior caso.' : 'Dobrar de 500 mil para 1 milhão aproxima o trabalho de quatro vezes o original. Esse teste opcional não foi executado.';
+  $('growth-value').textContent = integer(n*n/4);
+  $('growth-note').textContent = n===500000 ? 'Este tamanho obrigatório foi medido no pior caso.' : 'Dobrar a entrada multiplica os deslocamentos por quatro. O teste opcional também foi executado.';
 }
 document.querySelectorAll('[data-growth]').forEach(button=>button.addEventListener('click',()=>drawGrowth(Number(button.dataset.growth))));
 document.querySelectorAll('[data-answer]').forEach(button=>button.addEventListener('click',()=>{
   pressed('[data-answer]','answer',button.dataset.answer);
-  $('quiz-feedback').textContent = button.dataset.answer==='depende' ? 'Isso! A ordem também importa. Valores crescentes no mesmo balde exigem pouco esforço do Insertion Sort; valores distintos decrescentes produzem o pior caso.' : 'Falta uma condição: a ordem. Se os valores já chegam crescentes, o Insertion Sort tem custo linear mesmo com todos no mesmo balde.';
+  $('quiz-feedback').textContent = button.dataset.answer==='depende' ? 'Isso! A ordem também importa. Valores crescentes no mesmo balde exigem pouco esforço do Insertion Sort; dois blocos de uns e zeros produzem uma quantidade quadrática de inversões.' : 'Falta uma condição: a ordem. Se os valores já chegam crescentes, o Insertion Sort tem custo linear mesmo com todos no mesmo balde.';
 }));
 $('print-conclusions').addEventListener('click',()=>window.print());
 
-drawTheory('melhor'); drawDemo(); drawCode('distribuir');
-fillSelect('random-n','aleatorio'); fillSelect('cases-n','melhor');
-drawResult('random','aleatorio'); drawResult('cases','melhor'); drawGrowth(500000);
-$('conclusion-best').textContent = formattedTime(groups.melhor.at(-1).mean);
-$('conclusion-worst').textContent = formattedTime(groups.pior.at(-1).mean);
-followHash();
+function drawComparison() {
+  const scenario=$('comparison-case').value, n=Number($('comparison-n').value);
+  const c=buildGroups('counting_sort')[scenario].find(r=>r.n===n).mean, b=buildGroups('bucket_sort_insertion_int')[scenario].find(r=>r.n===n).mean;
+  $('comparison-counting').textContent=formattedTime(c);$('comparison-bucket').textContent=formattedTime(b);
+  const faster=c<=b?'Counting Sort':'Bucket Sort', ratio=Math.max(c,b)/Math.min(c,b);
+  $('comparison-summary').textContent=`Nesta amostra de ${integer(n)} elementos, ${faster} apresentou a menor média. A razão entre os tempos é ${decimal(ratio,2)}. Isso descreve este cenário e esta implementação, sem estabelecer superioridade universal.`;
+}
+function selectAlgorithm(name) {
+  algorithm=name; $('active-algorithm').value=name;
+  const url=new URL(location.href);url.searchParams.set('algoritmo',name);history.replaceState(null,'',url);
+  groups=buildGroups(name);demoStep=0;
+  drawTheory(document.querySelector('[data-theory][aria-pressed="true"]').dataset.theory);drawDemo();drawCode(document.querySelector('[data-code][aria-pressed="true"]').dataset.code);
+  fillSelect('random-n','aleatorio');fillSelect('cases-n',resultCase);drawResult('random','aleatorio');drawResult('cases',resultCase);
+  $('optional-results').textContent=`${algorithmName()}, n = 1.000.000: média de ${formattedTime(groups.melhor.at(-1).mean)} no melhor cenário para baldes e ${formattedTime(groups.pior.at(-1).mean)} no pior. Faixa K = 10.000.000.`;
+}
+$('comparison-n').replaceChildren(...[10,100,1000,5000,10000,50000,100000,500000,1000000].map(n=>{const o=document.createElement('option');o.value=n;o.textContent=integer(n);return o;}));
+$('comparison-n').value=1000000;
+['comparison-case','comparison-n'].forEach(id=>$(id).addEventListener('change',drawComparison));
+selectAlgorithm(algorithm);drawGrowth(500000);drawComparison();followHash();

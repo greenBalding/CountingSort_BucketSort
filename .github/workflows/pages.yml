@@ -5,10 +5,13 @@ on:
     branches: [main]
     paths:
       - 'web-apresentacao/**'
-      - 'db-resultados/bucket_sort_medicoes.csv'
+      - 'db-resultados/comparacao_medicoes.csv'
+      - 'db-resultados/comparacao_resultados.xlsx'
+      - 'doc-entrega/**'
       - 'cod-implementacao/preparar-apresentacao.mjs'
-      - 'cod-implementacao/bucket_sort.c'
-      - 'cod-implementacao/benchmark.c'
+      - 'cod-implementacao/bucket_sort_int.c'
+      - 'cod-implementacao/counting_sort.c'
+      - 'cod-implementacao/benchmark_comparacao.c'
       - '.github/workflows/pages.yml'
   workflow_dispatch:
 

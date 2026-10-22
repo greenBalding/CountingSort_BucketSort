@@ -11,6 +11,7 @@ Os baldes ocupam segmentos de um único vetor auxiliar. Contagens e posições d
 - `test_bucket_sort.c`: validação com casos de borda e comparação independente com `qsort`.
 - `executar-testes.ps1`: compilação e execução no Windows com GCC.
 - `gerar_planilha.mjs`: conversão das medições em planilha Excel com fórmulas e gráficos.
+- `preparar-apresentacao.mjs`: atualização dos dados e trechos de código usados na apresentação web, a partir do CSV e dos fontes em C.
 
 ## Compilação e execução
 
@@ -56,3 +57,13 @@ O tempo decorrido é obtido com `QueryPerformanceCounter` no Windows. A mediçã
 Cada execução deve produzir uma saída crescente e exatamente igual ao vetor ordenado com `qsort`. Falhas interrompem o experimento. Há uma chamada de aquecimento com 1.000 elementos aleatórios antes das medições registradas. As medições são executadas sequencialmente; o pior caso de 500.000 elementos pode levar vários minutos considerando as três repetições.
 
 Os registros ficam em [`../db-resultados`](../db-resultados/). Os dados da máquina estão em [`pc-utilizado.txt`](../doc-referencia/pc-utilizado.txt).
+
+## Atualização da apresentação
+
+Depois de atualizar as medições ou os fontes em C, execute na raiz do repositório:
+
+```powershell
+node cod-implementacao/preparar-apresentacao.mjs
+```
+
+O script valida as 75 medições e gera `web-apresentacao/dados.js`. A publicação pelo GitHub Pages também executa essa atualização. Os valores experimentais não são editados manualmente no código da interface.

@@ -5,6 +5,10 @@ on:
     branches: [main]
     paths:
       - 'web-apresentacao/**'
+      - 'db-resultados/bucket_sort_medicoes.csv'
+      - 'cod-implementacao/preparar-apresentacao.mjs'
+      - 'cod-implementacao/bucket_sort.c'
+      - 'cod-implementacao/benchmark.c'
       - '.github/workflows/pages.yml'
   workflow_dispatch:
 
@@ -28,6 +32,8 @@ jobs:
         uses: actions/checkout@v6
       - name: Configurar GitHub Pages
         uses: actions/configure-pages@v5
+      - name: Atualizar dados da apresentação
+        run: node cod-implementacao/preparar-apresentacao.mjs
       - name: Preparar apresentação
         uses: actions/upload-pages-artifact@v4
         with:

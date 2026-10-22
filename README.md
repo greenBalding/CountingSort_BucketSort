@@ -53,6 +53,8 @@ A comparação considera os tempos de execução para diferentes quantidades de 
 
 As instruções de compilação e os cenários de teste estão no [guia da implementação](cod-implementacao/README.md). A implementação e as medições desta etapa correspondem ao Bucket Sort.
 
+A apresentação segue os itens A a G, com análise teórica, simulação por etapas, trechos do código em C, gráficos das medições, configuração da máquina e conclusões para impressão. A seção de Counting Sort está identificada como uma etapa ainda pendente.
+
 Para visualizar a apresentação localmente, execute na raiz do projeto:
 
 ```powershell

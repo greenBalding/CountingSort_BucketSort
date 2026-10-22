@@ -7,9 +7,14 @@
 
 ---
 
-## Enunciado
+## Descrição
 
-> **(Cormen – 2.2.2)** Considere a ordenação de $n$ números armazenados no arranjo (vetor estático unidimensional) $A$, localizando primeiro o menor elemento de $A$ e permutando esse elemento com o elemento contido em $A[1]$. Em seguida, encontre o segundo menor elemento de $A$ e o troque pelo elemento $A[2]$. Continue dessa maneira para os primeiros $n - 1$ elementos de $A$.
+Este trabalho apresenta a análise teórica e experimental dos algoritmos Counting Sort e Bucket Sort para a ordenação crescente de `n` números armazenados em um vetor `A`, com implementação em linguagem C.
+
+- **Counting Sort (ordenação por contagem):** utiliza a contagem das ocorrências de chaves inteiras em uma faixa conhecida para construir a saída ordenada. Na versão estável, emprega contagens acumuladas para determinar as posições dos elementos em um vetor auxiliar.
+- **Bucket Sort (ordenação por baldes):** divide a faixa de valores em intervalos ordenados, distribui cada elemento no balde correspondente, ordena os elementos dentro de cada balde e reúne os resultados na ordem dos intervalos.
+
+A comparação considera os tempos de execução para diferentes quantidades de elementos e cenários de entrada, relacionando os resultados à complexidade teórica, à faixa de valores e, no Bucket Sort, à quantidade de baldes e ao algoritmo de ordenação interna.
 
 ---
 

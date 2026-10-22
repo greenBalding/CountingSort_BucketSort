@@ -34,3 +34,32 @@
 - [ ] **Item e:** Descrição da máquina de teste (CPU, RAM, modelo)
 - [ ] **Item f:** Teste opcional com 1.000.000 para melhor/pior/aleatório
 - [ ] **Item g:** Conclusões obtidas para discussão em sala e relatório final
+
+---
+
+## Livros de referência
+
+As páginas abaixo correspondem às versões dos livros salvas em `doc-referencia`. A página impressa é a numeração apresentada no próprio livro; a página do PDF é a posição contada pelo leitor de PDF, incluindo capa e páginas iniciais.
+
+### Counting Sort — ordenação por contagem
+
+**MORIN, Pat. _Open Data Structures (in C++)_. Edição 0.1Gβ.**
+
+- **Arquivo:** [Open Data Structures — Pat Morin](doc-referencia/Open_Data_Structures_Pat_Morin_CPP.pdf#page=253).
+- **Localização:** capítulo 11, “Sorting Algorithms”; seção 11.2, “Counting Sort and Radix Sort”; subseção **11.2.1, “Counting Sort”**.
+- **Páginas impressas:** 239–241 (**páginas 253–255 do PDF**). A subseção 11.2.2, sobre Radix Sort, começa ainda na página impressa 241.
+- **Conteúdo para a fundamentação teórica:** contagem das ocorrências, contagens acumuladas, construção do vetor de saída, implementação em C++, análise do tempo em função de `n` (quantidade de elementos) e `k` (tamanho da faixa de valores), além da estabilidade do algoritmo.
+- **Fonte original:** [site oficial do livro](https://opendatastructures.org/).
+
+### Bucket Sort — ordenação por baldes
+
+**KRAHETS e colaboradores. _Hello Algo_. Versão 1.3.0, edição em inglês com exemplos em C.**
+
+- **Arquivo:** [Hello Algo — versão em inglês com código em C](doc-referencia/Hello_Algo_1.3.0_English_C.pdf#page=273).
+- **Localização:** capítulo 11, “Sorting”; seção **11.8, “Bucket Sort”**.
+- **Páginas impressas:** 266–269 (**páginas 273–276 do PDF**).
+- **Funcionamento e implementação:** subseção **11.8.1, “Algorithm Flow”**, páginas impressas 266–267 (**páginas 273–274 do PDF**), com ilustração da distribuição, ordenação interna e reunião dos baldes, além de código em C.
+- **Análise de complexidade e estabilidade:** subseção **11.8.2, “Algorithm Characteristics”**, página impressa 268 (**página 275 do PDF**).
+- **Distribuição dos dados:** subseção **11.8.3, “How to Achieve Even Distribution”**, páginas impressas 268–269 (**páginas 275–276 do PDF**).
+- **Pior caso:** a seção 11.11, “Summary”, página impressa 279 (**página 286 do PDF**), explica que concentrar os elementos em um único balde pode produzir tempo quadrático quando a ordenação interna tem custo quadrático. A análise do trabalho deve explicitar o algoritmo interno e a quantidade de baldes adotados.
+- **Fonte original:** [PDF oficial da versão 1.3.0](https://github.com/krahets/hello-algo/releases/download/1.3.0/hello-algo_1.3.0_en_c.pdf) e [seção online sobre Bucket Sort](https://www.hello-algo.com/en/chapter_sorting/bucket_sort/).

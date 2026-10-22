@@ -123,7 +123,9 @@ function drawDemo() {
   $('demo-output-values').replaceChildren(...output.map(v=>v===null?Object.assign(document.createElement('span'),{className:'number-chip',textContent:'vazio'}):chip(v)));
 }
 $('demo-step').addEventListener('click',()=>{demoStep++;drawDemo();});
-$('demo-reset').addEventListener('click',()=>{demoStep=0;drawDemo();});
+/* No exemplo, cada reinicio sorteia 6 valores de 0 a 49 (cinco baldes de dez chaves). */
+function randomExample() { return Array.from({length: 6}, () => Math.floor(Math.random() * 50)); }
+$('demo-reset').addEventListener('click',()=>{if(demoCase==='exemplo')demoInputs.exemplo=randomExample();demoStep=0;drawDemo();});
 document.querySelectorAll('[data-demo]').forEach(button => button.addEventListener('click', () => { demoCase = button.dataset.demo; demoStep = 0; pressed('[data-demo]', 'demo', demoCase); drawDemo(); }));
 
 const codeNotes = {distribuir: 'Primeiro trecho da implementação usada no experimento. Counting Sort registra frequências; Bucket Sort distribui os valores nos intervalos.', ordenar: 'Counting Sort usa contagens acumuladas para posicionar a saída estável. Bucket Sort usa Insertion Sort em cada trecho.', medir: 'O relógio é lido antes e depois da chamada completa. Geração, cópia da entrada e validação ficam fora do intervalo.'};

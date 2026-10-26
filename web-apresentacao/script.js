@@ -236,6 +236,37 @@ function selectAlgorithm(name) {
   fillSelect('random-n','aleatorio');fillSelect('cases-n',resultCase);drawResult('random','aleatorio');drawResult('cases',resultCase);
   $('optional-results').textContent=`${algorithmName()}, n = 1.000.000: média de ${formattedTime(groups.melhor.at(-1).mean)} no melhor cenário para baldes e ${formattedTime(groups.pior.at(-1).mean)} no pior. Faixa K = 10.000.000.`;
 }
+/* Modo apresentação: em telas largas, separa texto (esquerda) e parte interativa (direita). */
+const wideQuery = matchMedia('(min-width: 1024px)');
+const stageParts = {percurso: '.route-options', analise: '.theory-panel', demonstracao: '.demo-board', implementacao: '.code-window', aleatorios: '.result-explorer', extremos: '.result-explorer', computador: '.hardware-hero,.spec-list', opcionais: '.growth-card,.growth-card + .note', conclusoes: '.takeaways,.quiz,.conclusion-scope', fontes: '.resource-list,[data-go="percurso"]'};
+const originalOrder = new Map(slides.map(slide => [slide, Array.from(slide.children)]));
+let widePreferred = false;
+try { widePreferred = localStorage.getItem('layout') === 'wide'; } catch {}
+function applyLayout() {
+  const wide = widePreferred && wideQuery.matches;
+  document.documentElement.classList.toggle('wide', wide);
+  $('layout-toggle').hidden = !wideQuery.matches;
+  $('layout-toggle').setAttribute('aria-pressed', String(wide));
+  slides.forEach(slide => {
+    const selector = stageParts[slide.id];
+    if (!selector || wide === slide.classList.contains('split')) return;
+    if (wide) {
+      const aside = document.createElement('div'), stage = document.createElement('div');
+      aside.className = 'slide-aside'; stage.className = 'slide-stage';
+      originalOrder.get(slide).forEach(child => (child.matches(selector) ? stage : aside).append(child));
+      slide.append(aside, stage);
+    } else slide.replaceChildren(...originalOrder.get(slide));
+    slide.classList.toggle('split', wide);
+  });
+}
+$('layout-toggle').addEventListener('click', () => {
+  widePreferred = !widePreferred;
+  try { localStorage.setItem('layout', widePreferred ? 'wide' : 'mobile'); } catch {}
+  applyLayout();
+});
+wideQuery.addEventListener('change', applyLayout);
+applyLayout();
+
 $('comparison-n').replaceChildren(...[10,100,1000,5000,10000,50000,100000,500000,1000000].map(n=>{const o=document.createElement('option');o.value=n;o.textContent=integer(n);return o;}));
 $('comparison-n').value=1000000;
 ['comparison-case','comparison-n'].forEach(id=>$(id).addEventListener('change',drawComparison));
